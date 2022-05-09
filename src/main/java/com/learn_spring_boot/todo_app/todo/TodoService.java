@@ -20,4 +20,12 @@ public class TodoService {
     public Optional<Todo> todoWithId(long id) {
         return todoRepository.findById(id);
     }
+
+    public Todo add(Todo newTodo) {
+        return todoRepository.save(newTodo);
+    }
+
+    public void remove(Long id) {
+        todoRepository.deleteById(id);
+    }
 }
