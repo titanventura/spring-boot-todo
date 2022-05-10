@@ -16,9 +16,7 @@ public class TodoService {
     }
 
     public List<Todo> allTodos() {
-        List<Todo> all = todoRepository.findAll();
-        System.out.println(all);
-        return all;
+        return todoRepository.findAll();
     }
 
     public Optional<Todo> todoWithId(long id) {

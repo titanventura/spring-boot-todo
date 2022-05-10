@@ -18,14 +18,14 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @GetMapping(path = "")
+    @GetMapping
     public List<Todo> allTodos() {
         return todoService.allTodos();
     }
 
     @GetMapping(path = "/{id}")
     public Todo getATodo(@PathVariable Long id) {
-        return todoService.todoWithId(id).orElse(null);
+        return todoService.todoWithId(id).orElseThrow(TodoNotFoundException::new);
     }
 
     @PostMapping
