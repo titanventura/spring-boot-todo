@@ -1,4 +1,6 @@
 fileignoreconfig:
 - filename: src/main/resources/db/migration/V1__CreateTodosTable.sql
   checksum: 13c083058dc34291f9641e3234c449d65bca2f629533eb193a1b94ed558b2715
+- filename: src/test/java/com/learn_spring_boot/todo_app/todo/TodoControllerTest.java
+  checksum: 303c7c47802e70a628a14478e0cd73ddbbc125f7fb1ea764d3d486f85a1e1d36
 version: ""

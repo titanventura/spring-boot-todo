@@ -74,7 +74,7 @@ public class TodoControllerTest {
                                 .content(new ObjectMapper().writeValueAsString(todo))
                 )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.text").value(todo.getText()))
@@ -82,5 +82,42 @@ public class TodoControllerTest {
         verify(todoService, times(1)).add(todo);
     }
 
+    @Test
+    void shouldUpdateATodoAndReturnASuccessfulUpdatedTodoResponseWhenPutRequestIsMadeToIndividualTodosEndpoint() throws Exception {
+        Todo previous = new Todo(1L, "Previous", null);
+        Todo updated = new Todo("Updated", "Test updated !");
+        when(todoService.update(previous.getId(), updated))
+                .then((Answer<Todo>) invocation -> {
+                    Long todoId = invocation.getArgument(0);
+                    Todo passed = invocation.getArgument(1);
+                    return new Todo(todoId, passed.getText(), passed.getDescription());
+                });
 
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put("/todos/{id}", previous.getId())
+                                .content(new ObjectMapper().writeValueAsString(updated))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(previous.getId()))
+                .andExpect(jsonPath("$.text").value(updated.getText()))
+                .andExpect(jsonPath("$.description").value(updated.getDescription()));
+
+        verify(todoService, times(1)).update(previous.getId(), updated);
+    }
+
+    @Test
+    void shouldDeleteTodoWhenDeleteRequestIsMadeToIndividualTodoDeleteEndpoint() throws Exception {
+        Todo todo = new Todo(1L, "Todo to be deleted !", null);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/todos/{id}", todo.getId())
+                )
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        verify(todoService, times(1)).remove(todo.getId());
+    }
 }
