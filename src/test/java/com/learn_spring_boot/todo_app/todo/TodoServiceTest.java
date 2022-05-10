@@ -37,7 +37,7 @@ public class TodoServiceTest {
         List<Todo> todos = todoService.allTodos();
 
         // assert
-        verify(todoRepository).findAll();
+        verify(todoRepository, times(1)).findAll();
         assertEquals(expected, todos);
     }
 
@@ -53,7 +53,7 @@ public class TodoServiceTest {
         Optional<Todo> actual = todoService.todoWithId(1L);
 
         // assert
-        verify(todoRepository).findById(1L);
+        verify(todoRepository, times(1)).findById(1L);
         assertTrue(actual.isPresent());
         assertEquals(expected, actual.get());
     }
@@ -68,7 +68,7 @@ public class TodoServiceTest {
         Todo actual = todoService.add(newTodo);
 
         // assert
-        verify(todoRepository).save(newTodo);
+        verify(todoRepository, times(1)).save(newTodo);
         assertEquals(newTodo, actual);
     }
 
