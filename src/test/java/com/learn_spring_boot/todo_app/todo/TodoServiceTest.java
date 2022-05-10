@@ -24,17 +24,14 @@ public class TodoServiceTest {
 
     @Test
     void shouldReturnAllTodosWhenGetAllTodosIsCalled() {
-        // arrange
         List<Todo> expected = List.of(
                 new Todo(1L, "Do the dishes", null),
                 new Todo(2L, "Do some squats !", null)
         );
         when(todoRepository.findAll()).thenReturn(expected);
 
-        // act
         List<Todo> todos = todoService.allTodos();
 
-        // assert
         verify(todoRepository, times(1)).findAll();
         assertEquals(expected, todos);
     }
@@ -42,15 +39,12 @@ public class TodoServiceTest {
 
     @Test
     void shouldReturnTodoWithId_1_WhenQueriedForTodoWithId_1() {
-        // arrange
         Todo expected = new Todo(1L, "Do the dishes", "Dishes");
         when(todoRepository.findById(anyLong()))
                 .thenReturn(Optional.of(expected));
 
-        // act
         Optional<Todo> actual = todoService.todoWithId(1L);
 
-        // assert
         verify(todoRepository, times(1)).findById(1L);
         assertTrue(actual.isPresent());
         assertEquals(expected, actual.get());
@@ -58,27 +52,33 @@ public class TodoServiceTest {
 
     @Test
     void shouldCreateNewTodoWhenAskedTodoService() {
-        // arrange
         Todo newTodo = new Todo(1L, "Get the signatures !", "Get signatures for the petition.");
         when(todoRepository.save(any(Todo.class))).thenReturn(newTodo);
 
-        // act
         Todo actual = todoService.add(newTodo);
 
-        // assert
         verify(todoRepository, times(1)).save(newTodo);
         assertEquals(newTodo, actual);
     }
 
     @Test
+    void shouldUpdateExistingTodoWhenUpdateIsCalledOnService() {
+        Todo updated = new Todo("Some Text !");
+        when(todoRepository.getById(1L)).thenReturn(new Todo(1L, "Old todo", null));
+
+        todoService.update(1L, updated);
+
+        verify(todoRepository, times(1)).getById(1L);
+        updated.setId(1L);
+        verify(todoRepository, times(1)).save(updated);
+    }
+
+    @Test
     void shouldDeleteTodoWhenDeleteIsCalledOnService() {
-        // arrange
         Todo todo = new Todo(1L, "Do Something !", null);
 
-        // act
         todoService.remove(todo.getId());
 
-        // assert
         verify(todoRepository, times(1)).deleteById(todo.getId());
     }
 }
