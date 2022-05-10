@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "text", nullable = false)
@@ -24,6 +24,12 @@ public class Todo {
     @Lob
     @Column(name = "description")
     private String description;
+
+    public Todo(String text, String description) {
+        this.text = text;
+        this.description = description;
+    }
+
 
     @Override
     public boolean equals(Object o) {

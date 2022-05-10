@@ -37,9 +37,6 @@ flyway {
     url = "jdbc:postgresql://localhost:5432/todo_app_db"
 }
 
-//tasks.named('test') {
-//    useJUnitPlatform()
-//}
 
 test {
     useJUnitPlatform()
